@@ -56,7 +56,7 @@ else
     
     # GitHub username
     while true; do
-        read -p "📝 GitHub username (e.g., 'johndoe'): " github_username
+        read -p "📝 Your GitHub username (e.g., 'johndoe'): " github_username
         if validate_input "${github_username}" && validate_github_username "${github_username}"; then
             break
         fi
@@ -64,7 +64,7 @@ else
 
     # Repository name
     while true; do
-        read -p "📝 Repository name (e.g., 'my-awesome-tool'): " repo_name
+        read -p "📝 The name of this repository (e.g., 'my-awesome-tool'): " repo_name
         if validate_input "${repo_name}" && validate_cli_name "${repo_name}"; then
             break
         fi
@@ -82,25 +82,29 @@ while true; do
     fi
 done
 
-# Homebrew tap name
+# Homebrew tap repository name
 echo ""
-echo "💡 Homebrew tap name is for distributing your CLI via Homebrew."
-echo "   This will create a repository named 'homebrew-<tap-name>' under your GitHub account."
-echo "   Press Enter to use the default 'homebrew-tap' or specify a custom name."
-read -p "📝 Homebrew tap name (default: 'homebrew-tap'): " tap_input
+echo "🍺 Homebrew Tap Repository Setup"
+echo "   You must first create a Homebrew tap repository on GitHub before proceeding."
+echo ""
+echo "   ⚠️  IMPORTANT: Create this repository on GitHub first!"
+echo "   - Go to GitHub and create a new public repository"
+echo "   - Name it 'homebrew-tap' (recommended) or 'homebrew-<something>'"
+echo "   - Initialize with a README (GoReleaser will manage the Formula)"
+echo ""
+echo "   💡 We strongly recommend using 'homebrew-tap' as your repository name."
+echo "      This is the standard convention and makes it easy for users to find."
+echo ""
+
+read -p "📝 Homebrew tap repository name (default: 'homebrew-tap', press Enter to use): " tap_input
 
 if [[ -z "${tap_input}" ]]; then
     tap_name="homebrew-tap"
-    echo "   Using default: ${tap_name}"
+    echo "   ✅ Using recommended default: ${github_username}/homebrew-tap"
 else
-    while true; do
-        if validate_cli_name "${tap_input}"; then
-            tap_name="${tap_input}"
-            break
-        else
-            read -p "📝 Please enter a valid tap name (letters, numbers, hyphens only): " tap_input
-        fi
-    done
+    # Use exactly what the user entered
+    tap_name="${tap_input}"
+    echo "   ✅ Will use repository: ${github_username}/${tap_name}"
 fi
 
 # Optional: CLI description
@@ -113,9 +117,9 @@ echo ""
 echo "📋 Configuration Summary:"
 echo "========================"
 echo "GitHub Username: ${github_username}"
-echo "Repository Name: ${repo_name}"
+echo "GitHub Repository Name: ${repo_name}"
 echo "CLI Binary Name: ${cli_name}"
-echo "Homebrew Tap Name: ${tap_name}"
+echo "Homebrew Tap Repository Name: ${tap_name}"
 echo "Description: ${cli_description}"
 echo ""
 

@@ -55,7 +55,7 @@ changelog:
 brews:
   - repository:
       owner: TEMPLATE_USERNAME
-      name: homebrew-TEMPLATE_TAP_NAME
+      name: TEMPLATE_TAP_NAME
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     folder: Formula
     homepage: "https://github.com/TEMPLATE_USERNAME/TEMPLATE_REPO_NAME"
