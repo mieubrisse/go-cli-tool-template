@@ -36,25 +36,40 @@ validate_cli_name() {
     return 0
 }
 
-# Collect user input
-echo "Please provide the following information:"
-echo ""
+# Auto-detect Git information
+echo "🔍 Auto-detecting Git repository information..."
 
-# GitHub username
-while true; do
-    read -p "📝 GitHub username (e.g., 'johndoe'): " github_username
-    if validate_input "${github_username}" && validate_github_username "${github_username}"; then
-        break
-    fi
-done
+# Try to get remote URL and extract username/repo
+git_remote_url=$(git remote get-url origin 2>/dev/null || echo "")
+github_username=""
+repo_name=""
 
-# Repository name
-while true; do
-    read -p "📝 Repository name (e.g., 'my-awesome-tool'): " repo_name
-    if validate_input "${repo_name}" && validate_cli_name "${repo_name}"; then
-        break
-    fi
-done
+if [[ "${git_remote_url}" =~ github\.com[:/]([^/]+)/([^/.]+) ]]; then
+    github_username="${BASH_REMATCH[1]}"
+    repo_name="${BASH_REMATCH[2]}"
+    echo "✅ Detected GitHub repository: ${github_username}/${repo_name}"
+else
+    echo "⚠️  Could not auto-detect GitHub repository from git remote."
+    echo ""
+    echo "Please provide the following information:"
+    echo ""
+    
+    # GitHub username
+    while true; do
+        read -p "📝 GitHub username (e.g., 'johndoe'): " github_username
+        if validate_input "${github_username}" && validate_github_username "${github_username}"; then
+            break
+        fi
+    done
+
+    # Repository name
+    while true; do
+        read -p "📝 Repository name (e.g., 'my-awesome-tool'): " repo_name
+        if validate_input "${repo_name}" && validate_cli_name "${repo_name}"; then
+            break
+        fi
+    done
+fi
 
 # CLI binary name
 echo ""
@@ -70,14 +85,23 @@ done
 # Homebrew tap name
 echo ""
 echo "💡 Homebrew tap name is for distributing your CLI via Homebrew."
-echo "   This will create a repository named 'homebrew-<tap-name>'."
-echo "   Common examples: 'tools', 'cli', 'homebrew'"
-while true; do
-    read -p "📝 Homebrew tap name (e.g., 'tools'): " tap_name
-    if validate_input "${tap_name}" && validate_cli_name "${tap_name}"; then
-        break
-    fi
-done
+echo "   This will create a repository named 'homebrew-<tap-name>' under your GitHub account."
+echo "   Press Enter to use the default 'homebrew-tap' or specify a custom name."
+read -p "📝 Homebrew tap name (default: 'homebrew-tap'): " tap_input
+
+if [[ -z "${tap_input}" ]]; then
+    tap_name="homebrew-tap"
+    echo "   Using default: ${tap_name}"
+else
+    while true; do
+        if validate_cli_name "${tap_input}"; then
+            tap_name="${tap_input}"
+            break
+        else
+            read -p "📝 Please enter a valid tap name (letters, numbers, hyphens only): " tap_input
+        fi
+    done
+fi
 
 # Optional: CLI description
 read -p "📝 CLI description (optional, press Enter to skip): " cli_description

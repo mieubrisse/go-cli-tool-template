@@ -3,7 +3,7 @@ Go CLI Tool Template
 
 This is a template repository for creating Go CLI tools with the following pre-configured infrastructure:
 
-- **Devcontainer** with Go development environment and Claude CLI
+- **Secure devcontainer** based on Anthropic's Claude Code reference implementation with Go development environment
 - **Cobra CLI framework** for building command-line applications
 - **Build script** for compiling binaries locally
 - **GoReleaser** automation for multi-platform releases
@@ -41,10 +41,34 @@ If you prefer to configure manually:
 5. Update this README with your project-specific information
 
 ### 3. Development
-Open the project in VS Code and reopen in the devcontainer when prompted. The devcontainer includes:
-- Go development environment (Go 1.23)
-- Git and GitHub CLI
-- Claude CLI for AI assistance
+
+Open the project in VS Code and reopen in the devcontainer when prompted.
+
+#### Secure Development Environment
+
+The devcontainer is based on Anthropic's Claude Code reference implementation and includes:
+
+**Core Tools:**
+- **Go development environment** (Go 1.19 via Debian packages)
+- **Claude Code CLI** - AI-powered coding assistant
+- **Node.js 20** - Base runtime environment
+- **Git with Delta** - Enhanced git diffs and version control
+- **GitHub CLI** - GitHub integration
+- **Zsh with enhancements** - Better shell experience with autosuggestions and syntax highlighting
+
+**Security Features:**
+- **Network firewall** - Restricts outbound connections to approved domains only
+- **Isolated environment** - Runs with controlled network access
+- **Persistent volumes** - Maintains bash history and Claude configuration across container rebuilds
+
+**Approved Network Access:**
+- GitHub (for code repositories and releases)
+- Go module proxy and checksum database (proxy.golang.org, sum.golang.org)
+- Go-related domains (golang.org, go.dev, pkg.go.dev)
+- Anthropic APIs (api.anthropic.com, claude.ai)
+- NPM registry (for Node.js dependencies)
+
+The firewall automatically blocks all other outbound connections for security.
 
 ### 4. Building
 Run the build script to compile your CLI tool:
@@ -71,7 +95,10 @@ Project Structure
 
 ```
 .
-├── .devcontainer/          # Development container configuration
+├── .devcontainer/          # Secure development container (based on Claude Code reference)
+│   ├── devcontainer.json  # Container configuration and VS Code settings
+│   ├── Dockerfile         # Container image with Go, Claude Code, and security tools
+│   └── init-firewall.sh   # Network security firewall script
 ├── .github/workflows/      # GitHub Actions workflows
 │   └── release.yml        # Automated release workflow
 ├── cmd/                    # CLI command definitions
@@ -80,8 +107,10 @@ Project Structure
 ├── build/                 # Built binaries (gitignored)
 ├── .goreleaser.yaml       # GoReleaser configuration
 ├── build.sh              # Build script
+├── configure.sh          # Automated project configuration script
 ├── main.go               # Application entry point
 ├── go.mod                # Go module definition
+├── TODO.md               # Manual setup tasks checklist
 └── README.md             # This file
 ```
 
