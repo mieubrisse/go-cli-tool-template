@@ -143,6 +143,7 @@ files_to_update=(
     "cmd/version.go"
     "build.sh"
     ".goreleaser.yaml"
+    "TODO.md"
 )
 
 # Perform replacements
@@ -159,7 +160,7 @@ for file in "${files_to_update[@]}"; do
             -e "s|TEMPLATE_CLI_NAME|${cli_name}|g" \
             -e "s|TEMPLATE_TAP_NAME|${tap_name}|g" \
             -e "s|TEMPLATE_REPO_NAME|${repo_name}|g" \
-            -e "s|A CLI tool built with Go and Cobra|${cli_description}|g" \
+            -e "s|TEMPLATE_DESCRIPTION|${cli_description}|g" \
             "${script_dirpath}/${file}" > "${temp_file}"
         
         # Replace original file

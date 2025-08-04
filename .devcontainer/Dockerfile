@@ -72,6 +72,12 @@ RUN wget -q "https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN
 # Install Claude Code globally
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
+# Install GoReleaser
+RUN echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends goreleaser \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Give node user sudo access for firewall management
 RUN usermod -aG sudo node && echo "node ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/node
 

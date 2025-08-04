@@ -59,7 +59,7 @@ brews:
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     folder: Formula
     homepage: "https://github.com/TEMPLATE_USERNAME/TEMPLATE_REPO_NAME"
-    description: "A CLI tool built with Go and Cobra"
+    description: "TEMPLATE_DESCRIPTION"
     license: "MIT"
     test: |
       system "#{bin}/TEMPLATE_CLI_NAME version"

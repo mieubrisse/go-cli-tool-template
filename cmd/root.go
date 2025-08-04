@@ -9,7 +9,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "TEMPLATE_CLI_NAME",
-	Short: "A brief description of your application",
+	Short: "TEMPLATE_DESCRIPTION",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
