@@ -1,5 +1,5 @@
 version: 2
-project_name: cli-tool
+project_name: TEMPLATE_CLI_NAME
 
 before:
   hooks:
@@ -24,7 +24,7 @@ builds:
       - goos: darwin
         goarch: arm
     main: ./
-    binary: cli-tool
+    binary: TEMPLATE_CLI_NAME
 
 archives:
   - format: tar.gz
@@ -54,14 +54,14 @@ changelog:
 
 brews:
   - repository:
-      owner: YOUR_GITHUB_USERNAME
-      name: homebrew-YOUR_TAP_NAME
+      owner: TEMPLATE_USERNAME
+      name: homebrew-TEMPLATE_TAP_NAME
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     folder: Formula
-    homepage: "https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME"
+    homepage: "https://github.com/TEMPLATE_USERNAME/TEMPLATE_REPO_NAME"
     description: "A CLI tool built with Go and Cobra"
     license: "MIT"
     test: |
-      system "#{bin}/cli-tool version"
+      system "#{bin}/TEMPLATE_CLI_NAME version"
     install: |
-      bin.install "cli-tool"
+      bin.install "TEMPLATE_CLI_NAME"

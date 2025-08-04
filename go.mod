@@ -1,4 +1,4 @@
-module github.com/example/cli-tool
+module github.com/TEMPLATE_USERNAME/TEMPLATE_CLI_NAME
 
 go 1.24.4
 

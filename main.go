@@ -1,6 +1,6 @@
 package main
 
-import "github.com/example/cli-tool/cmd"
+import "github.com/TEMPLATE_USERNAME/TEMPLATE_CLI_NAME/cmd"
 
 func main() {
 	cmd.Execute()

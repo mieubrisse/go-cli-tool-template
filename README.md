@@ -16,8 +16,25 @@ Getting Started
 ### 1. Use this template
 Click "Use this template" on GitHub to create a new repository from this template.
 
-### 2. Customize the project
-1. Update the module name in `go.mod` from `github.com/example/cli-tool` to your actual module path
+### 2. Configure the template
+
+**Automated Configuration (Recommended):**
+```bash
+./configure.sh
+```
+
+This script will prompt you for:
+- GitHub username
+- Repository name  
+- CLI binary name
+- Homebrew tap name
+- CLI description
+
+It automatically updates all necessary files with your configuration.
+
+**Manual Configuration:**
+If you prefer to configure manually:
+1. Update the module name in `go.mod` from the template placeholders to your actual module path
 2. Update the import paths in `main.go` and other files to match your new module name
 3. Customize the CLI name and description in `cmd/root.go`
 4. Update `.goreleaser.yaml` with your GitHub username, repository name, and Homebrew tap details
