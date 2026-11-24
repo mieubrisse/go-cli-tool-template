@@ -51,7 +51,7 @@ The devcontainer is based on Anthropic's Claude Code reference implementation an
 **Core Tools:**
 - **Go development environment** (Go 1.19 via Debian packages)
 - **Claude Code CLI** - AI-powered coding assistant
-- **Node.js 20** - Base runtime environment
+- **Node.js 24** - Base runtime environment
 - **Git with Delta** - Enhanced git diffs and version control
 - **GitHub CLI** - GitHub integration
 - **Zsh with enhancements** - Better shell experience with autosuggestions and syntax highlighting
