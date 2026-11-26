@@ -6,7 +6,8 @@ ENV TZ="$TZ"
 ARG CLAUDE_CODE_VERSION=latest
 ARG GIT_DELTA_VERSION=0.18.2
 ARG ZSH_IN_DOCKER_VERSION=1.2.0
-ARG GO_VERSION=1.23
+# Must be >= the `go` directive in go.mod
+ARG GO_VERSION=1.27.4
 
 # Install basic development tools and iptables/ipset
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -33,14 +34,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Go via apt-get
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    golang-go \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install Go from the official release for the build architecture (Debian's golang-go is too old for go.mod)
+RUN ARCH="$(dpkg --print-architecture)" \
+    && GO_TARBALL="go${GO_VERSION}.linux-${ARCH}.tar.gz" \
+    && wget -q "https://dl.google.com/go/${GO_TARBALL}" "https://dl.google.com/go/${GO_TARBALL}.sha256" \
+    && echo "$(cat "${GO_TARBALL}.sha256")  ${GO_TARBALL}" | sha256sum -c - \
+    && tar -C /usr/local -xzf "${GO_TARBALL}" \
+    && rm "${GO_TARBALL}" "${GO_TARBALL}.sha256"
 
 ENV GOPATH="/home/node/go"
 ENV GOBIN="/home/node/go/bin"
-ENV PATH="${GOBIN}:${PATH}"
+ENV PATH="${GOBIN}:/usr/local/go/bin:${PATH}"
 
 # Create directories for persistent volumes
 RUN mkdir -p /commandhistory /home/node/.claude
@@ -53,9 +57,10 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
     && echo "$SNIPPET" >> "/home/node/.bashrc"
 
 # Install Git Delta for better git diffs
-RUN wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_arm64.deb" \
-    && dpkg -i "git-delta_${GIT_DELTA_VERSION}_arm64.deb" \
-    && rm "git-delta_${GIT_DELTA_VERSION}_arm64.deb"
+RUN DELTA_DEB="git-delta_${GIT_DELTA_VERSION}_$(dpkg --print-architecture).deb" \
+    && wget -q "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/${DELTA_DEB}" \
+    && dpkg -i "${DELTA_DEB}" \
+    && rm "${DELTA_DEB}"
 
 # Install zsh-in-docker for better shell experience
 RUN wget -q "https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh" \

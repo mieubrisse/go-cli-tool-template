@@ -49,7 +49,7 @@ Open the project in VS Code and reopen in the devcontainer when prompted.
 The devcontainer is based on Anthropic's Claude Code reference implementation and includes:
 
 **Core Tools:**
-- **Go development environment** (Go 1.19 via Debian packages)
+- **Go development environment** (official Go release, version set by `GO_VERSION` in `.devcontainer/Dockerfile`; keep it at or above the `go` directive in `go.mod`)
 - **Claude Code CLI** - AI-powered coding assistant
 - **Node.js 24** - Base runtime environment
 - **Git with Delta** - Enhanced git diffs and version control
