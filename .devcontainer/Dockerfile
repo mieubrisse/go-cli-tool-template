@@ -46,6 +46,15 @@ ENV GOPATH="/home/node/go"
 ENV GOBIN="/home/node/go/bin"
 ENV PATH="${GOBIN}:/usr/local/go/bin:${PATH}"
 
+# Login shells (bash -l) reset PATH in /etc/profile, dropping the ENV above; re-add the Go dirs there
+RUN printf '%s\n' \
+    'for dir in /usr/local/go/bin "'"${GOBIN}"'"; do' \
+    '    case ":${PATH}:" in *":${dir}:"*) ;; *) PATH="${dir}:${PATH}" ;; esac' \
+    'done' \
+    'unset dir' \
+    'export PATH' \
+    > /etc/profile.d/go.sh
+
 # Create directories for persistent volumes
 RUN mkdir -p /commandhistory /home/node/.claude
 
