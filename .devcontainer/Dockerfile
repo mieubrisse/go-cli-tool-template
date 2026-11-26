@@ -51,6 +51,7 @@ RUN printf '%s\n' \
     'for dir in /usr/local/go/bin "'"${GOBIN}"'"; do' \
     '    case ":${PATH}:" in *":${dir}:"*) ;; *) PATH="${dir}:${PATH}" ;; esac' \
     'done' \
+    'unset dir' \
     'export PATH' \
     > /etc/profile.d/go.sh
 
